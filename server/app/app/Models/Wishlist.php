@@ -14,4 +14,14 @@ class Wishlist extends Model
         'user_id',
         'visit_time',
     ];
+
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

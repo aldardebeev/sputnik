@@ -21,4 +21,24 @@ class Destination extends Model
     {
         return $this->belongsToMany(User::class, 'wishlist');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(DestinationCategory::class);
+    }
+
+    public function images()
+    {
+        return $this->hasMany(Image::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
 }

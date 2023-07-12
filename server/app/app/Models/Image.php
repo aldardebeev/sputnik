@@ -14,4 +14,9 @@ class Image extends Model
         'users_photo',
         'destination_id',
     ];
+
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
 }
