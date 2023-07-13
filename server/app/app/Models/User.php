@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use App\Events\UserCreatedEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable implements JWTSubject
 {
     use HasFactory;
 
@@ -42,4 +46,22 @@ class User extends Model
         return $this->belongsToMany(Destination::class, 'wishlist');
     }
 
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+
+    protected $dispatchesEvents = [
+        'created' => UserCreatedEvent::class,
+    ];
+
+    public function role()
+    {
+        return $this->hasOne(Role::class);
+    }
 }

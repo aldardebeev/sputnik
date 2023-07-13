@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
+            $table->string('name')->unique();
+            $table->text('description')->unique();
             $table->float('long');
             $table->float('lat');
             $table->foreignid('category_id');
