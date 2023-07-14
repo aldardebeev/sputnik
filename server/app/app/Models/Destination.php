@@ -17,28 +17,26 @@ class Destination extends Model
         'average_rating',
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'wishlist');
-    }
-
     public function category()
     {
         return $this->belongsTo(DestinationCategory::class);
     }
 
-    public function images()
-    {
-        return $this->hasMany(Image::class);
-    }
+
 
     public function ratings()
     {
         return $this->hasMany(Rating::class);
     }
 
-    public function wishlists()
+    public function users()
     {
-        return $this->hasMany(Wishlist::class);
+        return $this->belongsToMany(User::class, 'wishlist');
     }
+
+    public function photos()
+    {
+        return $this->hasMany(DestinationPhoto::class);
+    }
+
 }

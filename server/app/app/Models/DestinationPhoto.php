@@ -5,15 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Wishlist extends Model
+class DestinationPhoto extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'destination_id',
-        'user_id',
-        'visit_time',
+        'image_url',
+        'destination_id'
     ];
 
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
 
 }

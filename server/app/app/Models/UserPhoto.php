@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class UserPhoto extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'image_url',
-        'users_photo',
-        'destination_id',
+       'image_url',
+        'user_id'
     ];
 
-    public function destination()
+    public function user()
     {
-        return $this->belongsTo(Destination::class);
+        return $this->belongsTo(User::class);
     }
 }
