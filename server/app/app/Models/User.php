@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Events\UserCreatedEvent;
+use App\Enums\Roles;
+use App\Models\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
@@ -11,7 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     protected $fillable = [
         'first_name',
@@ -41,6 +42,15 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::created(function (self $model) {
+            $model->sendNotificationsToAdmins();
+        });
+    }
+
     public function destinations()
     {
         return $this->belongsToMany(Destination::class, 'wishlist');
@@ -56,10 +66,6 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    protected $dispatchesEvents = [
-        'created' => UserCreatedEvent::class,
-    ];
-
     public function role()
     {
         return $this->hasOne(Role::class);
@@ -68,5 +74,23 @@ class User extends Authenticatable implements JWTSubject
     public function photos()
     {
         return $this->hasMany(UserPhoto::class);
+    }
+
+    protected function sendNotificationsToAdmins()
+    {
+        $adminRole = Role::where('name', Roles::ADMINISTRATOR)->first();
+
+        if (is_null($adminRole)) {
+            return;
+        }
+
+        $adminUsers = User::where('id', $adminRole->user_id)->get();
+
+        foreach ($adminUsers as $admin) {
+            Notification::create([
+                'message' => 'Новый пользователь зарегистрирован: ' . $this->username,
+                'user_id' => $admin->id,
+            ]);
+        }
     }
 }

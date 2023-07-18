@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->text('description')->unique();
-            $table->float('long');
-            $table->float('lat');
+            $table->text('description');
+            $table->float('longitude');
+            $table->float('latitude');
             $table->foreignid('category_id');
             $table->integer('average_rating');
             $table->timestamps();
